@@ -14,6 +14,7 @@ const FormStyle = styled.div`
     width: 100px;
     height: 40px;
     background: lawngreen;
+    border-radius: 10px;
     &:hover {
       background: green;
     }
@@ -66,6 +67,24 @@ class App extends Component {
     }
   };
 
+  deletePost = id => {
+    axios
+      .delete(`http://localhost:5000/friends/${id}`)
+      .then(res => {
+        this.setState({ friends: res.data });
+      })
+      .catch(err => console.log(err));
+  };
+
+  editPost = id => {
+    axios
+      .put(`http://localhost:5000/friends/${id}`)
+      .then(res => {
+        this.setState({ friends: res.data });
+      })
+      .catch(err => console.log(err));
+  };
+
   render() {
     return (
       <div className="App">
@@ -103,7 +122,18 @@ class App extends Component {
 
         <Route
           path="/"
-          render={props => <Friends {...props} friends={this.state.friends} />}
+          render={props => (
+            <Friends
+              {...props}
+              friends={this.state.friends}
+              editPost={this.editPost}
+              deletePost={this.deletePost}
+              inputHandler={this.inputHandler}
+              name={this.state.name}
+              age={this.state.age}
+              email={this.state.email}
+            />
+          )}
         />
       </div>
     );
