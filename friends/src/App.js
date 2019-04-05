@@ -76,9 +76,14 @@ class App extends Component {
       .catch(err => console.log(err));
   };
 
-  editPost = id => {
+  editPost = (id, updatedName, updatedAge, updatedEmail) => {
+    let newFriend = {
+      name: updatedName,
+      age: updatedAge,
+      email: updatedEmail
+    };
     axios
-      .put(`http://localhost:5000/friends/${id}`)
+      .put(`http://localhost:5000/friends/${id}`, newFriend)
       .then(res => {
         this.setState({ friends: res.data });
       })

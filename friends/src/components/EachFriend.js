@@ -43,17 +43,32 @@ class EachFriend extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      edit: false
+      edit: false,
+      currentName: "",
+      currentAge: "",
+      currentEmail: ""
     };
   }
+
+  componentDidMount() {
+    this.setState({
+      currentName: this.props.friend.name,
+      currentAge: this.props.friend.age,
+      currentEmail: this.props.friend.email
+    });
+  }
+
+  inputHandler = event => {
+    this.setState({ [event.target.name]: event.target.value });
+  };
 
   editHandlerTrue = () => {
     this.setState({ edit: true });
   };
 
-  editHandlerFalse = id => {
+  editHandlerFalse = (id, name, age, email) => {
+    this.props.editPost(id, name, age, email);
     this.setState({ edit: false });
-    this.props.editPost(id);
   };
 
   render() {
@@ -80,30 +95,39 @@ class EachFriend extends React.Component {
     } else {
       return (
         <FormStyle>
-          <form onSubmit={() => this.editHandlerFalse(this.props.friend.id)}>
+          <form
+            onSubmit={() =>
+              this.editHandlerFalse(
+                this.props.friend.id,
+                this.state.currentName,
+                this.state.currentAge,
+                this.state.currentEmail
+              )
+            }
+          >
             <h2>Name:</h2>
             <input
               type="text"
               placeholder="Enter name..."
-              name="name"
-              onChange={this.props.inputHandler}
-              value={this.props.name}
+              name="currentName"
+              onChange={this.inputHandler}
+              value={this.state.currentName}
             />
             <h2>Age:</h2>
             <input
               type="text"
               placeholder="Enter age..."
-              name="age"
-              onChange={this.props.inputHandler}
-              value={this.props.age}
+              name="currentAge"
+              onChange={this.inputHandler}
+              value={this.state.currentAge}
             />
             <h2>Email:</h2>
             <input
               type="text"
               placeholder="Enter email..."
-              name="email"
-              onChange={this.props.inputHandler}
-              value={this.props.email}
+              name="currentEmail"
+              onChange={this.inputHandler}
+              value={this.state.currentEmail}
             />
             <div>
               <button type="submit">Finish Edit</button>
